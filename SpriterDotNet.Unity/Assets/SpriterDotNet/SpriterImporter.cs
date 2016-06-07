@@ -30,11 +30,17 @@ namespace SpriterDotNetUnity
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromPath)
         {
+            if(IsImportingSpriterImporter(importedAssets)) return;
             foreach (string asset in importedAssets)
             {
                 if (!IsScml(asset)) continue;
                 CreateSpriter(asset);
             }
+        }
+
+        private static bool IsImportingSpriterImporter(string[] assets)
+        {
+            return assets.Where(asset => asset.EndsWith(typeof(SpriterImporter).Name + ".cs")).Any();
         }
 
         private static bool IsScml(string path)
